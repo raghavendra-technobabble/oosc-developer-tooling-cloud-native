@@ -1,0 +1,13 @@
+FROM node:22 as builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+
+# FROM node:22-slim
+# WORKDIR /app
+# COPY --from=builder /app .
+# RUN npm install --only=production
+CMD node server-naive.js
+
+
