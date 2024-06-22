@@ -1,0 +1,20 @@
+FROM node:22 as builder
+WORKDIR /app
+RUN apt-get update && apt-get install libcairo2-dev libjpeg-dev libgif-dev libpango1.0-dev -y
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+
+#Runtime
+FROM node:22-slim
+WORKDIR /app
+COPY --from=builder /app .
+RUN npm install --only=production
+
+# Installing awscliv2
+RUN apt-get update && apt-get install curl unzip -y
+RUN	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN	unzip awscliv2.zip && ./aws/install
+
+CMD node server.js
+
