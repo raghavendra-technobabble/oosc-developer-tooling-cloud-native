@@ -1,4 +1,4 @@
-FROM node:22-slim
+FROM ubuntu:jammy
 WORKDIR /app
 COPY sample.txt .
 RUN mkdir new_dir
